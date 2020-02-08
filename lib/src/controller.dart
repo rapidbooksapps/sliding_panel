@@ -75,6 +75,10 @@ class PanelController {
     if (controlling) panel.rebuild(then: then);
   }
 
+  void jumpListViewToTop(){
+    panel.jumpListViewToTop();
+  }
+  
   /// Used to dismiss the panel.
   /// No matter how much [PanelSize.closedHeight] is given, by calling this,
   /// the panel gets completely hidden as if you gave it a
