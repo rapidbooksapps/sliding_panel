@@ -121,6 +121,10 @@ class _SlidingPanelState extends State<SlidingPanel> with TickerProviderStateMix
       });
     }
   }
+  
+  void jumpListViewToTop(){
+    _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+  }
 
   void _calculateHeaderHeight() {
     final RenderBox boxHeader = _keyHeader?.currentContext?.findRenderObject() ?? null;
