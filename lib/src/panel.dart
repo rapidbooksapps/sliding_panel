@@ -116,12 +116,12 @@ class _SlidingPanelState extends State<SlidingPanel> with TickerProviderStateMix
         widget?.panelController?._updateDurations();
 
         SchedulerBinding.instance.addPostFrameCallback(
-          (_) => then?.call(),
+              (_) => then?.call(),
         );
       });
     }
   }
-  
+
   void jumpListViewToTop(){
     _scrollController.jumpTo(_scrollController.position.minScrollExtent);
   }
@@ -623,58 +623,61 @@ class _SlidingPanelState extends State<SlidingPanel> with TickerProviderStateMix
   }
 
   Widget get _headerSliver => SlidingPanelSliverAppBar(
-        title: Material(
-          type: MaterialType.transparency,
-          child: GestureDetector(
-            onTap: () => header?.onTap?.call(),
-            child: Container(
-              key: _keyHeader,
-              decoration: BoxDecoration(
-                border: header.decoration.border,
-                borderRadius: header.decoration.borderRadius,
-                color: header.decoration.backgroundColor ?? Theme.of(context).canvasColor,
-              ),
-              padding: header.decoration.padding,
-              margin: header.decoration.margin,
-              child: header.headerContent,
-            ),
+    title: Material(
+      type: MaterialType.transparency,
+      child: GestureDetector(
+        onTap: () => header?.onTap?.call(),
+        child: Container(
+          key: _keyHeader,
+          decoration: BoxDecoration(
+            border: header.decoration.border,
+            borderRadius: header.decoration.borderRadius,
+            color: header.decoration.backgroundColor ?? Theme.of(context).canvasColor,
           ),
+          padding: header.decoration.padding,
+          margin: header.decoration.margin,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              header?.options?.leading ?? Container(),
+              Expanded (
+                child: header.headerContent,
+              ),
+            ],),
         ),
-        shape: (header.decoration.borderRadius != null)
-            ? RoundedRectangleBorder(borderRadius: header.decoration.borderRadius)
-            : null,
-        titleSpacing: 0,
-        backgroundColor: header.decoration.backgroundColor ?? Theme.of(context).canvasColor,
-        iconTheme: IconThemeData(color: _appBarIconsColor),
-        automaticallyImplyLeading: false,
-        titleHeight: _calculatedHeaderHeight,
-        stretch: false,
-        flexibleSpace: null,
-        bottom: null,
-        actionsIconTheme: null,
-        expandedHeight: null,
-        //
-        primary: header.options.primary,
-        centerTitle: header.options.centerTitle,
-        elevation: header.options.elevation,
-        forceElevated: header.options.forceElevated,
-        pinned: header.options.alwaysOnTop,
-        floating: header.options.floating,
-        snap: header.options.floating,
-        leading: Column(
+      ),
+    ),
+    shape: (header.decoration.borderRadius != null)
+        ? RoundedRectangleBorder(borderRadius: header.decoration.borderRadius)
+        : null,
+    titleSpacing: 0,
+    backgroundColor: header.decoration.backgroundColor ?? Theme.of(context).canvasColor,
+    iconTheme: IconThemeData(color: _appBarIconsColor),
+    automaticallyImplyLeading: false,
+    titleHeight: _calculatedHeaderHeight,
+    stretch: false,
+    flexibleSpace: null,
+    bottom: null,
+    actionsIconTheme: null,
+    expandedHeight: null,
+    //
+    primary: header.options.primary,
+    centerTitle: header.options.centerTitle,
+    elevation: header.options.elevation,
+    forceElevated: header.options.forceElevated,
+    pinned: header.options.alwaysOnTop,
+    floating: header.options.floating,
+    snap: header.options.floating,
+    leading: null,
+    actions: [
+      for (var action in header?.options?.trailing ?? [])
+        Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: header.options.iconsAlignment,
-          children: <Widget>[Flexible(child: header?.options?.leading ?? Container())],
+          children: <Widget>[Flexible(child: action)],
         ),
-        actions: [
-          for (var action in header?.options?.trailing ?? [])
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: header.options.iconsAlignment,
-              children: <Widget>[Flexible(child: action)],
-            ),
-        ],
-      );
+    ],
+  );
 
   Widget get _collapsedWidget {
     double collapsedHeight = 0.0;
@@ -786,84 +789,84 @@ class _SlidingPanelState extends State<SlidingPanel> with TickerProviderStateMix
   }
 
   Widget get _offStagedFooter => Offstage(
-        child: Container(
-          key: _keyFooter,
-          margin: footer.decoration.margin,
-          padding: footer.decoration.padding,
-          decoration: BoxDecoration(
-            border: footer.decoration.border,
-          ),
-          child: Container(
-            child: footer.footerContent,
-          ),
-        ),
-      );
+    child: Container(
+      key: _keyFooter,
+      margin: footer.decoration.margin,
+      padding: footer.decoration.padding,
+      decoration: BoxDecoration(
+        border: footer.decoration.border,
+      ),
+      child: Container(
+        child: footer.footerContent,
+      ),
+    ),
+  );
 
   Widget get _offStagedContent => Offstage(
-        child: Container(
-          key: _keyContent,
+    child: Container(
+      key: _keyContent,
 //          margin: decoration.margin,
 //          padding: decoration.padding,
-          decoration: BoxDecoration(border: decoration.border),
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              ..._panelContentItems,
-              SizedBox(
-                // also add footer's margin, NOT padding
-                height: (footer?.decoration?.margin?.vertical ?? 0),
-              )
-            ],
-          ),
-        ),
-      );
+      decoration: BoxDecoration(border: decoration.border),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          ..._panelContentItems,
+          SizedBox(
+            // also add footer's margin, NOT padding
+            height: (footer?.decoration?.margin?.vertical ?? 0),
+          )
+        ],
+      ),
+    ),
+  );
 
   Widget get _offStagedCollapsed => Offstage(
-        child: Container(
-          key: _keyCollapsed,
-          child: collapsed.collapsedContent,
-        ),
-      );
+    child: Container(
+      key: _keyCollapsed,
+      child: collapsed.collapsedContent,
+    ),
+  );
 
   Widget get _backdropShadow => GestureDetector(
-        onVerticalDragUpdate: (details) => _dragPanel(
-          this,
-          delta: details.primaryDelta,
-          shouldListScroll: false,
-          isGesture: true,
-          dragFromBody: widget.backdropConfig.dragFromBody,
-          scrollContentSuper: () {},
-        ),
-        onVerticalDragEnd: (details) => _onPanelDragEnd(this, -details.primaryVelocity),
-        onTap: () => _handleBackdropTap(this),
-        child: Opacity(
-          opacity: _getBackdropOpacityAmount(this),
-          child: Container(
-            height: _metadata.constrainedHeight,
-            width: _metadata.constrainedWidth,
-            // setting color null enables Gesture recognition when collapsed / closed
-            color: _getBackdropColor(this),
-          ),
-        ),
-      );
+    onVerticalDragUpdate: (details) => _dragPanel(
+      this,
+      delta: details.primaryDelta,
+      shouldListScroll: false,
+      isGesture: true,
+      dragFromBody: widget.backdropConfig.dragFromBody,
+      scrollContentSuper: () {},
+    ),
+    onVerticalDragEnd: (details) => _onPanelDragEnd(this, -details.primaryVelocity),
+    onTap: () => _handleBackdropTap(this),
+    child: Opacity(
+      opacity: _getBackdropOpacityAmount(this),
+      child: Container(
+        height: _metadata.constrainedHeight,
+        width: _metadata.constrainedWidth,
+        // setting color null enables Gesture recognition when collapsed / closed
+        color: _getBackdropColor(this),
+      ),
+    ),
+  );
 
   Widget get _panelContent => Container(
-        constraints: BoxConstraints(
-          maxWidth: _screenOrientation == Orientation.portrait ? widget.maxWidth.portrait : widget.maxWidth.landscape,
-        ),
-        padding: decoration.padding,
-        margin: decoration.margin,
-        height: _metadata.currentHeight * _metadata.constrainedHeight,
-        decoration: widget.renderPanelBackground
-            ? BoxDecoration(
-                border: decoration.border,
-                borderRadius: decoration.borderRadius,
-                boxShadow: decoration.boxShadows,
-                color: decoration.backgroundColor ?? Theme.of(context).canvasColor,
-              )
-            : null,
-        child: _mainPanel,
-      );
+    constraints: BoxConstraints(
+      maxWidth: _screenOrientation == Orientation.portrait ? widget.maxWidth.portrait : widget.maxWidth.landscape,
+    ),
+    padding: decoration.padding,
+    margin: decoration.margin,
+    height: _metadata.currentHeight * _metadata.constrainedHeight,
+    decoration: widget.renderPanelBackground
+        ? BoxDecoration(
+      border: decoration.border,
+      borderRadius: decoration.borderRadius,
+      boxShadow: decoration.boxShadows,
+      color: decoration.backgroundColor ?? Theme.of(context).canvasColor,
+    )
+        : null,
+    child: _mainPanel,
+  );
 
   Widget get _body {
     return Stack(
