@@ -29,9 +29,12 @@ class PanelController {
 
     double diffExpanded = panel._metadata.expandedHeight - panel._metadata.collapsedHeight;
 
-    double _durCollapsed = ((diffCollapsed * panel.widget.duration.inMilliseconds) / _diffHeight);
+//     double _durCollapsed = ((diffCollapsed * panel.widget.duration.inMilliseconds) / _diffHeight);
 
-    double _durExpanded = ((diffExpanded * panel.widget.duration.inMilliseconds) / _diffHeight);
+//     double _durExpanded = ((diffExpanded * panel.widget.duration.inMilliseconds) / _diffHeight);
+    double _durCollapsed = ((_diffHeight * panel.widget.duration.inMilliseconds) / _diffHeight);
+
+    double _durExpanded = ((_diffHeight * panel.widget.duration.inMilliseconds) / _diffHeight);
 
     if (_durCollapsed.isInfinite || _durCollapsed.isNaN) {
       _durationCollapsed = Duration(milliseconds: 0);
