@@ -160,12 +160,43 @@ class _PanelScrollController extends ScrollController {
   @override
   _PanelScrollPosition createScrollPosition(ScrollPhysics physics, ScrollContext context, ScrollPosition oldPosition) {
     _scrollPosition = _PanelScrollPosition(
-      physics: physics,
+//      physics: physics,
+      physics: _PanelScrollableScrollPhysics(panel, parent: physics),
       context: context,
       oldPos: oldPosition,
       metadata: metadata,
       panel: panel,
     );
     return _scrollPosition;
+  }
+}
+
+
+class _PanelScrollableScrollPhysics extends ScrollPhysics {
+  final _SlidingPanelState panel;
+
+  /// Creates scroll physics that does not let the user scroll.
+  const _PanelScrollableScrollPhysics(this.panel, { ScrollPhysics parent })
+      : super(parent: parent);
+
+  @override
+  _PanelScrollableScrollPhysics applyTo(ScrollPhysics ancestor) {
+    return _PanelScrollableScrollPhysics(this.panel, parent: buildParent(ancestor));
+  }
+
+  @override
+  bool shouldAcceptUserOffset(ScrollMetrics position) {
+    if (panel._currentPanelState == PanelState.animating) {
+      return false;
+    }
+    return parent.shouldAcceptUserOffset(position);
+  }
+
+  @override
+  bool get allowImplicitScrolling {
+    if (panel._currentPanelState == PanelState.animating) {
+      return false;
+    }
+    return parent.allowImplicitScrolling;
   }
 }
