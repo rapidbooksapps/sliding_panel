@@ -902,7 +902,7 @@ class _SlidingPanelState extends State<SlidingPanel> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _decidePop(this),
+      onWillPop: Platform.isIOS?null:() => _decidePop(this),
       child: LayoutBuilder(
         builder: (context, BoxConstraints constraints) {
           _metadata.totalHeight = _metadata.expandedHeight * constraints.biggest.height;
