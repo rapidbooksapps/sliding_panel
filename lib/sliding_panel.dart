@@ -1,6 +1,7 @@
 library sliding_panel;
 
 import 'dart:math';
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
