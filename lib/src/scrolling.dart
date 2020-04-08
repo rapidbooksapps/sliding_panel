@@ -188,10 +188,13 @@ class _PanelScrollableScrollPhysics extends ScrollPhysics {
   bool shouldAcceptUserOffset(ScrollMetrics position) {
     if (panel._currentPanelState == PanelState.collapsed || panel._currentPanelState == PanelState.expanded) {
       _done = true;
+    } else if (panel._currentPanelState == PanelState.closed) {
+      _done = false;
     }
     if (panel._currentPanelState == PanelState.animating && !_done) {
       return false;
     }
+
     return parent.shouldAcceptUserOffset(position);
   }
 
@@ -199,6 +202,8 @@ class _PanelScrollableScrollPhysics extends ScrollPhysics {
   bool get allowImplicitScrolling {
     if (panel._currentPanelState == PanelState.collapsed || panel._currentPanelState == PanelState.expanded) {
       _done = true;
+    } else if (panel._currentPanelState == PanelState.closed) {
+      _done = false;
     }
     if (panel._currentPanelState == PanelState.animating && !_done) {
       return false;
