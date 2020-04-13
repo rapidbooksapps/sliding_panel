@@ -115,6 +115,11 @@ class PanelController {
         panel._shouldNotifyOnClose = false;
       }
 
+      FocusScopeNode focusScope = FocusScope.of(panel.context);
+      if( focusScope != null ){
+        focusScope.unfocus();
+      }
+
       return _setPanelPosition(panel,
           duration: currentState == PanelState.collapsed
               ? _durationCollapsed
